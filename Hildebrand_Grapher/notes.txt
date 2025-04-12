@@ -1,0 +1,12 @@
+#if you're using pandas and want to calculate mean + std from a DataFrame group:
+
+#python
+#Copy
+#Edit
+#means = df.groupby('Group')['Value'].mean()
+#stds = df.groupby('Group')['Value'].std()
+
+#plt.bar(means.index, means.values, yerr=stds.values, capsize=5)
+
+
+#plt.xlim(0,150)
