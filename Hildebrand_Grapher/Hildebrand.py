@@ -1,6 +1,6 @@
 #import the necessary code libraries
 import matplotlib.pyplot as plt
-import numpy as np
+import numpy as np 
 import pandas as pd
 from tkinter import Tk, filedialog
 
@@ -28,24 +28,41 @@ l_cycle = df['Mean L % Stance Time']
 r_end = df['Temporal Symmetry'] * 100
 r_cycle = df['Mean R % Stance Time']
 r_lag = 50 - (df['Temporal Symmetry'] * 100)
+r_lag_error = df['Temporal Symmetry'] * 100
 r_start = df['Mean R % Stance Time'] - (df['Temporal Symmetry'] * 100)
 y_val = ['Left', 'Right']
 
 #create a graph of a specific size (width,height) in inches
-plt.figure(figsize=(8, 3))
+plt.figure(figsize=(6, 2))
 
 #plot the bars for the right foot
-p3=plt.barh( y=y_val[1],  width=r_cycle[0], height=0.4, left = r_end, xerr=[[r_cycle[1]],[r_cycle[1]]],  align='center', label = 'left hind', color='black', capsize=5 )
+#p3=plt.barh( y=y_val[1],  width=r_cycle[0], height=0.4, left = r_end, xerr=[[r_cycle[1]],[r_cycle[1]]],  align='center', label = 'left hind', color='black', capsize=5 )
+p3=plt.barh( y=y_val[1],  width=r_cycle[0], height=0.4, left = r_end[0],  align='center', color='black', edgecolor='black')
+#error
+p6=plt.barh( y=y_val[1],  width=r_cycle[1], height=0.4, left = (r_end[0] + r_cycle[0]),  align='center', color='lightgrey', edgecolor='black')
+p7=plt.barh( y=y_val[1],  width=r_cycle[1], height=0.4, left = r_end[0] - r_cycle[1],  align='center', color='lightgrey', edgecolor='black')
+
 if r_lag[0] > 0:
-   p4=plt.barh( y=y_val[1],  width=r_lag[0], height=0.4, left=150-r_lag[0], align='center', label = 'left hind', color='black')
-p5=plt.barh( y=y_val[1],  width=r_start[0], height=0.4, align='center', label = 'left hind', xerr=[[r_start[0]],[r_start[0]]], color='black',  capsize=5 )        
+   p4=plt.barh( y=y_val[1],  width=r_lag[0], height=0.4, left=150-r_lag[0], align='center', color='black', edgecolor='black')
+   #errors
+   p9=plt.barh(y=y_val[1],  width=r_lag_error[1], height=0.4, left=150-r_lag[0]-r_lag_error[1], align='center',color='lightgrey', edgecolor='black')
+p5=plt.barh( y=y_val[1],  width=r_start[0], height=0.4, align='center', color='black', edgecolor='black')
+#error
+p8=plt.barh( y=y_val[1],  width=r_start[1], height=0.4, left=r_start[0], align='center', color='lightgrey', edgecolor='black')
 
 #plot the bars for the left foot
-p1=plt.barh( y=y_val[0],  width=l_end[0], height=0.4, align='center', xerr=[[l_end[1]],[l_end[1]]], label = 'left hind', color='black',   capsize=5 )
+p1=plt.barh( y=y_val[0],  width=l_end[0], height=0.4, align='center', color='black', edgecolor='black' )
+#error
+p10=plt.barh( y=y_val[0],  width=l_end[1], height=0.4, left=l_end[0], align='center',  color='lightgrey', edgecolor='black')
+
 if l_cycle[0] > 50:
-    p2=plt.barh(y=y_val[0], width=50, height=0.4, left=100,  align='center', xerr=[[l_cycle[1]],[l_cycle[1]]], label = 'left hind', color='black', capsize=5 )
+    p2=plt.barh(y=y_val[0], width=50, height=0.4, left=100,  align='center', color='black', edgecolor='black' )
+    p12=plt.barh( y=y_val[0],  width=l_cycle[1], height=0.4, left=100-l_cycle[1], align='center', color='lightgrey', edgecolor='black')
+
 else:
-    p2=plt.barh(y=y_val[0], width=l_cycle[0], height=0.4, left=100, align='center', xerr=[[l_cycle[1]],[l_cycle[1]]], label = 'left hind', color='black', capsize=5 )
+    p2=plt.barh(y=y_val[0], width=l_cycle[0], height=0.4, left=100, align='center', color='black',  edgecolor='black' )
+    #error
+    p11=plt.barh( y=y_val[0],  width=l_cycle[1], height=0.4, left=50+l_cycle[1], align='center', color='lightgrey', edgecolor='black')
 
 #add labels to the graph
 plt.xlabel('Gait Cycle')
