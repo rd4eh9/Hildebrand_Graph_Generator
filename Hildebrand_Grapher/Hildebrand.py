@@ -4,12 +4,11 @@ import matplotlib.ticker as ticker
 import numpy as np 
 import pandas as pd
 from tkinter import Tk, filedialog
-import statistics
 import math
 
 
 
-#1st input option function
+#1st input option function (A)
 def from_data_points_excel():
     #create the graphic interface for the file explorer
     root = Tk()
@@ -33,48 +32,54 @@ def from_data_points_excel():
     l_stance_cycle = df['Mean L % Stance Time']
     temporal_symmetry = df['Temporal Symmetry'] * 100
     r_stance_time = df['Mean R % Stance Time']
-    r_cycle_toe_off = 50 - (df['Temporal Symmetry'] * 100)
-    temporal_symmetry_cycle = df['Temporal Symmetry'] * 100 #delete
-    r_toe_off = df['Mean R % Stance Time'] - (df['Temporal Symmetry'] * 100)
+    r_cycle_toe_strike = 50 - (df['Temporal Symmetry'] * 100)
+    r_toe_strike = df['Mean R % Stance Time'] - (df['Temporal Symmetry'] * 100)
     y_label = ['Left', 'Right']
 
-    l_standard_deviation = l_stance_time[0]
-    r_standard_deviation = r_stance_time[0]
-    num_terms = 6
-    r_confidence_interval_right = r_stance_time + 1.96*(r_standard_deviation/(num_terms)**(1/2)) 
-    l_confidence_interval_left = l_stance_time - 1.96*(l_standard_deviation/(num_terms)**(1/2))
+    l_standard_deviation = l_stance_time[1]
+    r_standard_deviation = r_stance_time[1]
+    num_terms = 6 #fix this one
+    r_confidence_interval =  1.96*(r_standard_deviation/(num_terms)**(1/2)) 
+    l_confidence_interval =  1.96*(l_standard_deviation/(num_terms)**(1/2))
 
 
     #create a graph of a specific size (width,height) in inches
     plt.figure(figsize=(6, 2))
 
-    #plot the bars for the right foot
+    #plot right foot strike bar
     p3=plt.barh( y=y_label[1],  width=r_stance_time[0], height=0.4, left = temporal_symmetry[0],  align='center', color='black', edgecolor='black')
-    #error
-    p6=plt.barh( y=y_label[1],  width=r_stance_time[1], height=0.4, left = temporal_symmetry[0] + r_stance_time[0],  align='center', color='lightgrey', edgecolor='black')
+    #plot right foot strike bar right error
+    p6=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left = temporal_symmetry[0] + r_stance_time[0],  align='center', color='lightgrey', edgecolor='black')
+    #plot right foot strike bar left error
+    p6=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left = temporal_symmetry[0] - r_confidence_interval,  align='center', color='lightgrey', edgecolor='black')
 
-    if r_cycle_toe_off[0] > 0:
-        p4=plt.barh( y=y_label[1],  width=r_cycle_toe_off[0], height=0.4, left=150-r_cycle_toe_off[0], align='center', color='black', edgecolor='black')
-        #errors
-        p9=plt.barh(y=y_label[1],  width=temporal_symmetry_cycle[1], height=0.4, left=150-r_cycle_toe_off[0]-temporal_symmetry_cycle[1], align='center',color='lightgrey', edgecolor='black')
-    p5=plt.barh( y=y_label[1],  width=r_toe_off[0], height=0.4, align='center', color='black', edgecolor='black')
-    #error
-    p8=plt.barh( y=y_label[1],  width=r_toe_off[1], height=0.4, left=r_toe_off[0], align='center', color='lightgrey', edgecolor='black')
+    if r_cycle_toe_strike[0] > 0: #if the right foot strikes again before 150%
+        #plot second right foot strike bar
+        p4=plt.barh( y=y_label[1],  width=r_cycle_toe_strike[0], height=0.4, left=150-r_cycle_toe_strike[0], align='center', color='black', edgecolor='black')
+        #plot second right foot strike bar
+        p9=plt.barh(y=y_label[1],  width=r_confidence_interval, height=0.4, left=150-r_cycle_toe_strike[0]-r_confidence_interval, align='center',color='lightgrey', edgecolor='black')
+    #plot initial right foot step
+    p5=plt.barh( y=y_label[1],  width=r_toe_strike[0], height=0.4, align='center', color='black', edgecolor='black')
+    #plot initial right foot step error
+    p8=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left=r_toe_strike[0], align='center', color='lightgrey', edgecolor='black')
 
-    #plot the bars for the left foot
+    #plot initial left foot step
     p1=plt.barh( y=y_label[0],  width=l_stance_time[0], height=0.4, align='center', color='black', edgecolor='black' )
-    #error
-    p10=plt.barh( y=y_label[0],  width=l_stance_time[1], height=0.4, left=l_stance_time[0], align='center',  color='lightgrey', edgecolor='black')
+    #plot initial  left foot step error
+    p10=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=l_stance_time[0], align='center',  color='lightgray', edgecolor='black')
 
-    if l_stance_cycle[0] > 50:
+    if l_stance_cycle[0] > 50: #if the second left foot strike goes past 150%
+        #plot the second left foot strike up to 150%
         p2=plt.barh(y=y_label[0], width=50, height=0.4, left=100,  align='center', color='black', edgecolor='black' )
-        p12=plt.barh( y=y_label[0],  width=l_stance_cycle[1], height=0.4, left=100-l_stance_cycle[1], align='center', color='lightgrey', edgecolor='black')
-
+        
     else:
+        #plot the second left foot strike
         p2=plt.barh(y=y_label[0], width=l_stance_cycle[0], height=0.4, left=100, align='center', color='black',  edgecolor='black' )
-        #error
-        p11=plt.barh( y=y_label[0],  width=l_stance_cycle[1], height=0.4, left=50+l_stance_cycle[1], align='center', color='lightgrey', edgecolor='black')
-
+        #plot the second left foot strike right error
+        p11=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=100+l_stance_cycle[0], align='center', color='lightgrey', edgecolor='black')
+    #plot the second left foot strike left error
+    p12=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=100-l_confidence_interval, align='center', color='lightgrey', edgecolor='black')
+    
     #add labels to the graph
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
@@ -83,7 +88,7 @@ def from_data_points_excel():
     #plot the Hildebrand graph
     plt.show()
 
-#2nd input option function 
+#2nd input option function (B)
 def from_data_ranges_excel():
 
     #create the graphic interface for the file explorer
@@ -97,7 +102,7 @@ def from_data_ranges_excel():
     )    
     #save the Excel file data (from the sheet titled 'Raw Data') to a python dataframe 
     if file_path:
-        df = pd.read_excel(file_path, 'Raw Data')
+        df = pd.read_excel(file_path, 'Test B')
         print(df.head())
     else:
         print("No file selected.")
@@ -105,22 +110,23 @@ def from_data_ranges_excel():
 
     #extract the variables (spreadsheet columns) needed to create the Hildebrand graph
     l_stance_time = df['Mean L % Stance Time']
-    l_stance_time = sum(l_stance_time) / len(l_stance_time)
+    num_terms = len(l_stance_time)
+    l_stance_time = sum(l_stance_time) / num_terms
     l_stance_cycle = l_stance_time
     temporal_symmetry = df['Temporal Symmetry'] * 100
-    temporal_symmetry = sum(temporal_symmetry) / len(temporal_symmetry)
+    temporal_symmetry = sum(temporal_symmetry) / num_terms
     r_stance_time = df['Mean R % Stance Time']
-    r_stance_time = sum(r_stance_time) / len(r_stance_time)
-    r_cycle_toe_off = 50 - (temporal_symmetry * 100)
-    temporal_symmetry_cycle = temporal_symmetry * 100 #delete
-    r_toe_off = r_stance_time - (temporal_symmetry * 100)
+    r_stance_time = sum(r_stance_time) / num_terms
+    r_cycle_toe_strike = 50 - (temporal_symmetry)
+    #temporal_symmetry_cycle = temporal_symmetry * 100 #delete
+    r_toe_strike = r_stance_time - (temporal_symmetry)
     y_label = ['Left', 'Right']
 
-    l_standard_deviation = l_stance_time
-    r_standard_deviation = r_stance_time
-    num_terms = 6
-    r_confidence_interval_right = r_stance_time + 1.96*(r_standard_deviation/(num_terms)**(1/2)) 
-    l_confidence_interval_left = l_stance_time - 1.96*(l_standard_deviation/(num_terms)**(1/2))
+    
+    l_standard_deviation =  np.std(df['Mean L % Stance Time'])
+    r_standard_deviation = np.std(df['Mean R % Stance Time'])
+    r_confidence_interval = 1.96*(r_standard_deviation/(num_terms)**(1/2)) 
+    l_confidence_interval = 1.96*(l_standard_deviation/(num_terms)**(1/2))
 
 
     #create a graph of a specific size (width,height) in inches
@@ -128,31 +134,38 @@ def from_data_ranges_excel():
 
     #plot the bars for the right foot
     p3=plt.barh( y=y_label[1],  width=r_stance_time, height=0.4, left = temporal_symmetry,  align='center', color='black', edgecolor='black')
-    #error
-    p6=plt.barh( y=y_label[1],  width=r_stance_time, height=0.4, left = temporal_symmetry + r_stance_time,  align='center', color='lightgrey', edgecolor='black')
+    #plot right foot strike bar right error
+    p6=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left = temporal_symmetry + r_stance_time,  align='center', color='lightgrey', edgecolor='black')
+    #plot right foot strike bar left error
+    p6=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left = temporal_symmetry - r_confidence_interval,  align='center', color='lightgrey', edgecolor='black')
 
-    if r_cycle_toe_off > 0:
-        p4=plt.barh( y=y_label[1],  width=r_cycle_toe_off, height=0.4, left=150-r_cycle_toe_off, align='center', color='black', edgecolor='black')
-        #errors
-        p9=plt.barh(y=y_label[1],  width=temporal_symmetry_cycle, height=0.4, left=150-r_cycle_toe_off-temporal_symmetry_cycle, align='center',color='lightgrey', edgecolor='black')
-    p5=plt.barh( y=y_label[1],  width=r_toe_off, height=0.4, align='center', color='black', edgecolor='black')
-    #error
-    p8=plt.barh( y=y_label[1],  width=r_toe_off, height=0.4, left=r_toe_off, align='center', color='lightgrey', edgecolor='black')
+    if r_cycle_toe_strike > 0:#if the right foot strikes again before 150%
+        #plot second right foot strike bar
+        p4=plt.barh( y=y_label[1],  width=r_cycle_toe_strike, height=0.4, left=150-r_cycle_toe_strike, align='center', color='black', edgecolor='black')
+        #plot second right foot strike bar error
+        p9=plt.barh(y=y_label[1],  width=r_confidence_interval, height=0.4, left=150-r_cycle_toe_strike-r_confidence_interval, align='center',color='lightgrey', edgecolor='black')
+     #plot initial right foot step
+    p5=plt.barh( y=y_label[1],  width=r_toe_strike, height=0.4, align='center', color='black', edgecolor='black')
+    #plot initial right foot step error
+    p8=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left=r_toe_strike, align='center', color='lightgrey', edgecolor='black')
 
-    #plot the bars for the left foot
+    #plot initial left foot step
     p1=plt.barh( y=y_label[0],  width=l_stance_time, height=0.4, align='center', color='black', edgecolor='black' )
-    #error
-    p10=plt.barh( y=y_label[0],  width=l_stance_time, height=0.4, left=l_stance_time, align='center',  color='lightgrey', edgecolor='black')
+    #plot initial  left foot step error
+    p10=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=l_stance_time, align='center',  color='lightgray', edgecolor='black')
 
-    if l_stance_cycle > 50:
+    if l_stance_cycle > 50: #if the second left foot strike goes past 150%
+        #plot the second left foot strike up to 150%
         p2=plt.barh(y=y_label[0], width=50, height=0.4, left=100,  align='center', color='black', edgecolor='black' )
-        p12=plt.barh( y=y_label[0],  width=l_stance_cycle, height=0.4, left=100-l_stance_cycle, align='center', color='lightgrey', edgecolor='black')
-
+       
     else:
+        #plot the second left foot strike
         p2=plt.barh(y=y_label[0], width=l_stance_cycle, height=0.4, left=100, align='center', color='black',  edgecolor='black' )
-        #error
-        p11=plt.barh( y=y_label[0],  width=l_stance_cycle, height=0.4, left=50+l_stance_cycle, align='center', color='lightgrey', edgecolor='black')
-
+        #plot the second left foot strike right error
+        p11=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=100+l_stance_cycle, align='center', color='lightgrey', edgecolor='black')
+    #plot the second left foot strike left error
+    p12=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=100-l_confidence_interval, align='center', color='lightgrey', edgecolor='black')
+    
     #add labels to the graph
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
@@ -161,55 +174,64 @@ def from_data_ranges_excel():
     #plot the Hildebrand graph
     plt.show()
 
-#3rd input function option
+#3rd input function option (C)
 def from_data_points_user_input():
 
-    l_stance_time = float(input("Enter Left % Stance Time\n"))
-    r_stance_time = float(input("Enter Right % Stance Time\n"))
-    temporal_symmetry = float(input("Enter Temporal Symmetry\n"))
+    l_stance_time = float(input("Enter Mean Left % Stance Time\n"))
+    r_stance_time = float(input("Enter Mean Right % Stance Time\n"))
+    temporal_symmetry = float(input("Enter Mean Temporal Symmetry\n"))
     
     l_stance_cycle = l_stance_time
-    r_cycle_toe_off = 50 - (temporal_symmetry)
-    temporal_symmetry_cycle = temporal_symmetry #delete
-    r_toe_off = r_stance_time - temporal_symmetry 
+    r_cycle_toe_strike = 50 - (temporal_symmetry)
+    r_toe_strike = r_stance_time - temporal_symmetry 
     y_label = ['Left', 'Right']
 
-    l_standard_deviation = l_stance_time
-    r_standard_deviation = r_stance_time
-    num_terms = 6
-    r_confidence_interval_right = r_stance_time + 1.96*(r_standard_deviation/(num_terms)**(1/2)) 
-    l_confidence_interval_left = l_stance_time - 1.96*(l_standard_deviation/(num_terms)**(1/2))
+    l_standard_deviation = float(input("Enter Left Stance Time Confidence Interval\n"))
+    r_standard_deviation = float(input("Enter Right Stance Time Confidence Interval\n"))
+    num_terms = float(input("Enter Number of Trials in Data Set\n"))
+    r_confidence_interval =  1.96*(r_standard_deviation/(num_terms)**(1/2)) 
+    l_confidence_interval =  1.96*(l_standard_deviation/(num_terms)**(1/2))
 
 
     #create a graph of a specific size (width,height) in inches
     plt.figure(figsize=(6, 2))
 
-    #plot the bars for the right foot
+    #plot right foot strike bar
     p3=plt.barh( y=y_label[1],  width=r_stance_time, height=0.4, left = temporal_symmetry,  align='center', color='black', edgecolor='black')
-    #error
-    p6=plt.barh( y=y_label[1],  width=r_stance_time, height=0.4, left = temporal_symmetry + r_stance_time,  align='center', color='lightgrey', edgecolor='black')
+    #plot right foot strike bar right error
+    p6=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left = temporal_symmetry + r_stance_time,  align='center', color='lightgrey', edgecolor='black')
+    #plot right foot strike bar left error
+    p6=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left = temporal_symmetry - r_confidence_interval,  align='center', color='lightgrey', edgecolor='black')
 
-    if r_cycle_toe_off > 0:
-        p4=plt.barh( y=y_label[1],  width=r_cycle_toe_off, height=0.4, left=150-r_cycle_toe_off, align='center', color='black', edgecolor='black')
-        #errors
-        p9=plt.barh(y=y_label[1],  width=temporal_symmetry_cycle, height=0.4, left=150-r_cycle_toe_off-temporal_symmetry_cycle, align='center',color='lightgrey', edgecolor='black')
-    p5=plt.barh( y=y_label[1],  width=r_toe_off, height=0.4, align='center', color='black', edgecolor='black')
-    #error
-    p8=plt.barh( y=y_label[1],  width=r_toe_off, height=0.4, left=r_toe_off, align='center', color='lightgrey', edgecolor='black')
+    if r_cycle_toe_strike > 0: #if the right foot strikes again before 150%
+        #plot second right foot strike bar
+        p4=plt.barh( y=y_label[1],  width=r_cycle_toe_strike, height=0.4, left=150-r_cycle_toe_strike, align='center', color='black', edgecolor='black')
+        #plot second right foot strike bar
+        p9=plt.barh(y=y_label[1],  width=r_confidence_interval, height=0.4, left=150-r_cycle_toe_strike-r_confidence_interval, align='center',color='lightgrey', edgecolor='black')
+    #plot initial right foot step
+    p5=plt.barh( y=y_label[1],  width=r_toe_strike, height=0.4, align='center', color='black', edgecolor='black')
+    #plot initial right foot step error
+    p8=plt.barh( y=y_label[1],  width=r_confidence_interval, height=0.4, left=r_toe_strike, align='center', color='lightgrey', edgecolor='black')
 
-    #plot the bars for the left foot
+    #plot initial left foot step
     p1=plt.barh( y=y_label[0],  width=l_stance_time, height=0.4, align='center', color='black', edgecolor='black' )
-    #error
-    p10=plt.barh( y=y_label[0],  width=l_stance_time, height=0.4, left=l_stance_time, align='center',  color='lightgrey', edgecolor='black')
+    #plot initial  left foot step error
+    p10=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=l_stance_time, align='center',  color='lightgray', edgecolor='black')
 
-    if l_stance_cycle > 50:
+    if l_stance_cycle > 50: #if the second left foot strike goes past 150%
+        #plot the second left foot strike up to 150%
         p2=plt.barh(y=y_label[0], width=50, height=0.4, left=100,  align='center', color='black', edgecolor='black' )
-        p12=plt.barh( y=y_label[0],  width=l_stance_cycle, height=0.4, left=100-l_stance_cycle, align='center', color='lightgrey', edgecolor='black')
-
+        
     else:
+        #plot the second left foot strike
         p2=plt.barh(y=y_label[0], width=l_stance_cycle, height=0.4, left=100, align='center', color='black',  edgecolor='black' )
-        #error
-        p11=plt.barh( y=y_label[0],  width=l_stance_cycle, height=0.4, left=50+l_stance_cycle, align='center', color='lightgrey', edgecolor='black')
+        #plot the second left foot strike right error
+        p11=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=100+l_stance_cycle, align='center', color='lightgrey', edgecolor='black')
+    #plot the second left foot strike left error
+    p12=plt.barh( y=y_label[0],  width=l_confidence_interval, height=0.4, left=100-l_confidence_interval, align='center', color='lightgrey', edgecolor='black')
+    
+
+
 
     #add labels to the graph
     plt.xlabel('Gait Cycle (%)')
