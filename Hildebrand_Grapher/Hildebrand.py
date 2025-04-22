@@ -167,8 +167,8 @@ def bi_from_data_points_user_input():
     y_label = ['Left', 'Right']
 
     #calculate statistical values for graphing
-    l_standard_deviation = float(input("Enter Left Stance Time Confidence Interval\n"))
-    r_standard_deviation = float(input("Enter Right Stance Time Confidence Interval\n"))
+    l_standard_deviation = float(input("Enter Left Stance Time % Confidence Interval\n"))
+    r_standard_deviation = float(input("Enter Right Stance Time % Confidence Interval\n"))
     num_terms = float(input("Enter Number of Trials in Data Set\n"))
     r_confidence_interval =  1.96*(r_standard_deviation/(num_terms)**(1/2)) 
     l_confidence_interval =  1.96*(l_standard_deviation/(num_terms)**(1/2))
@@ -210,10 +210,10 @@ def quad_from_data_points_user_input():
     y_label = ['LH','LF', 'RF', 'RH']
 
     #calculate statistical values for graphing
-    lh_standard_deviation = float(input("Enter Left Hind Stance Time Confidence Interval\n"))
-    lf_standard_deviation = float(input("Enter Left Fore Stance Time Confidence Interval\n"))
-    rf_standard_deviation = float(input("Enter Right Fore Stance Time Confidence Interval\n"))
-    rh_standard_deviation = float(input("Enter Right Hind Stance Time Confidence Interval\n"))
+    lh_standard_deviation = float(input("Enter Left Hind Stance Time % Confidence Interval\n"))
+    lf_standard_deviation = float(input("Enter Left Fore Stance Time % Confidence Interval\n"))
+    rf_standard_deviation = float(input("Enter Right Fore Stance Time % Confidence Interval\n"))
+    rh_standard_deviation = float(input("Enter Right Hind Stance Time % Confidence Interval\n"))
     num_terms = float(input("Enter Number of Trials in Data Set\n"))
     rh_confidence_interval =  1.96*(rh_standard_deviation/(num_terms)**(1/2)) 
     lh_confidence_interval =  1.96*(lh_standard_deviation/(num_terms)**(1/2))
@@ -268,17 +268,17 @@ def both_from_data_points_user_input():
     y_label = ['LH','LF', 'RF', 'RH', 'L', 'R']
 
     #calculate statistical values for graphing
-    lh_standard_deviation = float(input("Enter Quadrupedal Left Hind Stance Time Confidence Interval\n"))
-    lf_standard_deviation = float(input("Enter Quadrupedal Left Fore Stance Time Confidence Interval\n"))
-    rf_standard_deviation = float(input("Enter Quadrupedal Right Fore Stance Time Confidence Interval\n"))
-    rh_standard_deviation = float(input("Enter Quadrupedal Right Hind Stance Time Confidence Interval\n"))
+    lh_standard_deviation = float(input("Enter Quadrupedal Left Hind Stance Time % Confidence Interval\n"))
+    lf_standard_deviation = float(input("Enter Quadrupedal Left Fore Stance Time % Confidence Interval\n"))
+    rf_standard_deviation = float(input("Enter Quadrupedal Right Fore Stance Time % Confidence Interval\n"))
+    rh_standard_deviation = float(input("Enter Quadrupedal Right Hind Stance Time % Confidence Interval\n"))
     num_terms = float(input("Enter Number of Trials in Quadrupedal Data Set\n"))
     rh_confidence_interval =  1.96*(rh_standard_deviation/(num_terms)**(1/2)) 
     lh_confidence_interval =  1.96*(lh_standard_deviation/(num_terms)**(1/2))
     rf_confidence_interval =  1.96*(rf_standard_deviation/(num_terms)**(1/2)) 
     lf_confidence_interval =  1.96*(lf_standard_deviation/(num_terms)**(1/2))
-    l_standard_deviation = float(input("Enter Bipdeal Left Stance Time Confidence Interval\n"))
-    r_standard_deviation = float(input("Enter Bipedal Right Stance Time Confidence Interval\n"))
+    l_standard_deviation = float(input("Enter Bipdeal Left Stance Time % Confidence Interval\n"))
+    r_standard_deviation = float(input("Enter Bipedal Right Stance Time % Confidence Interval\n"))
     num_terms = float(input("Enter Number of Trials in Bipedal Data Set\n"))
     r_confidence_interval =  1.96*(r_standard_deviation/(num_terms)**(1/2)) 
     l_confidence_interval =  1.96*(l_standard_deviation/(num_terms)**(1/2))
@@ -316,9 +316,9 @@ def both_from_data_points_user_input():
 user_choice = input("Select data format\n 'A' - from one Excel rows\n 'B' - avg from all excel rows\n 'C' - from user input\n  ")
 
 #create Hildebrand graph based on selected data input type
-if user_choice == 'A':
+if user_choice == 'A' or user_choice == 'a' :
     from_data_points_excel()
-elif user_choice == 'B':
+elif user_choice == 'B' or user_choice == 'b':
     from_data_ranges_excel()
 else:
     graph_type = input("Graph type:\n '2' - Bipedal\n '4' Quadrupedal\n '6' - Both\n ")
