@@ -91,6 +91,7 @@ def from_data_points_excel():
     #add labels to the graph
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
+    plt.xlim([0, 150])
     plt.xticks(np.arange(0, 151, step=50)) 
 
     #plot the Hildebrand graph
@@ -147,6 +148,7 @@ def from_data_ranges_excel():
     #add labels to the graph
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
+    plt.xlim([0, 150])
     plt.xticks(np.arange(0, 151, step=50)) 
 
     #plot the Hildebrand graph
@@ -158,7 +160,7 @@ def bi_from_data_points_user_input():
     #save the user input as variables needed to create the Hildebrand graph
     l_stance_time = float(input("Enter Mean Left % Stance Time\n"))
     r_stance_time = float(input("Enter Mean Right % Stance Time\n"))
-    temporal_symmetry = float(input("Enter Mean Temporal Symmetry\n"))
+    temporal_symmetry = float(input("Enter Mean % Temporal Symmetry\n"))
     l_stance_cycle = l_stance_time
     r_cycle_toe_strike = 50 - (temporal_symmetry)
     r_toe_strike = r_stance_time - temporal_symmetry 
@@ -184,6 +186,7 @@ def bi_from_data_points_user_input():
     #add labels to the graph
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
+    plt.xlim([0, 150])
     plt.xticks(np.arange(0, 151, step=50)) 
 
     #plot the Hildebrand graph
@@ -194,10 +197,10 @@ def quad_from_data_points_user_input():
     #save the user input as variables needed to create the Hildebrand graph
     lh_stance_time = float(input("Enter Mean Left Hind % Stance Time\n"))
     lf_stance_time = float(input("Enter Mean Left Fore % Stance Time\n"))
-    l_temporal_symmetry = float(input("Enter Mean Left Temporal Symmetry\n"))
+    l_temporal_symmetry = float(input("Enter Mean Left % Temporal Symmetry\n"))
     rf_stance_time = float(input("Enter Mean Right Fore % Stance Time\n"))
     rh_stance_time = float(input("Enter Mean Right Hind % Stance Time\n"))
-    r_temporal_symmetry = float(input("Enter Mean Right Temporal Symmetry\n"))
+    r_temporal_symmetry = float(input("Enter Mean Right % Temporal Symmetry\n"))
     rf_stance_cycle = rf_stance_time
     lh_stance_cycle = lh_stance_time
     rh_cycle_toe_strike = 50 - (r_temporal_symmetry)
@@ -236,6 +239,7 @@ def quad_from_data_points_user_input():
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
     plt.xticks(np.arange(0, 151, step=50)) 
+    plt.xlim([0, 150])
 
     #plot the Hildebrand graph
     plt.show()
@@ -245,13 +249,13 @@ def both_from_data_points_user_input():
     #save the user input as variables needed to create the Hildebrand graph
     lh_stance_time = float(input("Enter Quadrupedal Mean Left Hind % Stance Time\n"))
     lf_stance_time = float(input("Enter Quadrupedal Mean Left Fore % Stance Time\n"))
-    l_temporal_symmetry = float(input("Enter Quadrupedal Mean Left Temporal Symmetry\n"))
+    l_temporal_symmetry = float(input("Enter Quadrupedal Mean Left % Temporal Symmetry\n"))
     rf_stance_time = float(input("Enter Quadrupedal Mean Right Fore % Stance Time\n"))
     rh_stance_time = float(input("Enter Quadrupedal Mean Right Hind % Stance Time\n"))
-    r_temporal_symmetry = float(input("Enter Quadrupedal Mean Right Temporal Symmetry\n"))
+    r_temporal_symmetry = float(input("Enter Quadrupedal Mean Right % Temporal Symmetry\n"))
     l_stance_time = float(input("Enter Bipedal Mean Left % Stance Time\n"))
     r_stance_time = float(input("Enter Bipedal Mean Right % Stance Time\n"))
-    temporal_symmetry = float(input("Enter Bipedal Mean Temporal Symmetry\n"))
+    temporal_symmetry = float(input("Enter Bipedal Mean % Temporal Symmetry\n"))
     rf_stance_cycle = rf_stance_time
     lh_stance_cycle = lh_stance_time
     rh_cycle_toe_strike = 50 - (r_temporal_symmetry)
@@ -304,7 +308,7 @@ def both_from_data_points_user_input():
     plt.xlabel('Gait Cycle (%)')
     plt.ylabel('Foot')
     plt.xticks(np.arange(0, 151, step=50)) 
-
+    plt.xlim([0, 150])
     #plot the Hildebrand graph
     plt.show()
 
