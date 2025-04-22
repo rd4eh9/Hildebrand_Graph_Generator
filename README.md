@@ -1,6 +1,9 @@
 User Guide for Hildebrand Graph Generator Code
+
 IDE: Visual Studio Code
+
 Language: Python
+
 Libraries: matplotlib.pyplot, matplotlib.ticker, numpy, pandas, tkinter
 
 Program Overview: This program consists of several functions which can generate Hildebrand graphs from different types of input. It also includes the option to generate bipedal or quadrupedal graphs from user input. Comments are included within the code to explain the program flow in detail. 
@@ -26,17 +29,22 @@ The second input option function reads in data from an entire Excel sheet and cr
 The third input option reads in data that the user enters into the terminal. There are three functions associated with this input type, which generate bipedal, quadrupedal, and combined bipedal and quadrupedal Hildebrand graphs, respectively.
 
 Program Flow:
- ![image](https://github.com/user-attachments/assets/24d6f36b-7a14-4aee-9dde-95b74b8d1dc9)
+
+![image](https://github.com/user-attachments/assets/b3c2947a-fb76-4438-994a-7e06ad14bc89)
+
 
 user_choice = input("Select data format…”)
 
 The program flow allows the user to select the type of data input to generate the graph. The user is prompted to make a selection in the terminal. The appropriate function is called based on the user input choice.
 
-	 ![image](https://github.com/user-attachments/assets/a82480aa-3b82-4014-942b-5d13fd6130a2)
+![image](https://github.com/user-attachments/assets/976e6736-1247-4012-8361-dfe073b2de45)
+
 
 graph_type = input("Graph type…”)
 
 If the user is manually inputting data, they can also select the type of graph to display. The appropriate function is called based on the user input choice. 
- ![image](https://github.com/user-attachments/assets/e98e3693-308c-483f-b04d-c18d6e9911bd)
+
+![image](https://github.com/user-attachments/assets/4fc15104-a351-4224-855d-d4b22152a112)
+
 
 Then, the user will input the individual data points into the terminal as they are prompted to.
